@@ -1,0 +1,1 @@
+start javaw -jar code-generator-gui-1.0.jar
