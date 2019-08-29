@@ -203,6 +203,7 @@ public class CommonUtils {
                 writeBufferLine("     * " + tableInfo.getRemarks());
                 writeBufferLine("     */");
                 writeBufferLine("    private " + changeType(tableInfo.getDataTypeName(), tableInfo.getColumnSize()) + " " + underline2Camel(tableInfo.getColumnName(), true) + ";");
+                bw.newLine();
             }
             for (TableInfo tableInfo : list) {
                 writeBufferLine("    public " + changeType(tableInfo.getDataTypeName(), tableInfo.getColumnSize()) + " get" + underline2Camel(tableInfo.getColumnName(), false) + "() {");
