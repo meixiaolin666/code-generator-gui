@@ -254,9 +254,8 @@ public class CommonUtils {
             writeBufferLine("           " + list.stream().map(a -> a.getColumnName()).collect(Collectors.joining(", ")));
             writeBufferLine("       )");
             writeBufferLine("       values (");
-            bw.write("          ");
             for (int i = 0; i < list.size(); i++) {
-                bw.write("#{" + underline2Camel(list.get(i).getColumnName(), true) + ",jdbcType=" + list.get(i).getDataTypeName().split(" ")[0] + "}");
+                bw.write("          #{" + underline2Camel(list.get(i).getColumnName(), true) + ",jdbcType=" + list.get(i).getDataTypeName().split(" ")[0] + "}");
                 if (i != list.size() - 1) {
                     bw.write(", ");
                 }
@@ -285,7 +284,7 @@ public class CommonUtils {
             writeBufferLine("       update " + list.get(0).getTableName() + " set");
             for (int i = 0; i < list.size(); i++) {
                 if (i != 0) {
-                    bw.write("               " + list.get(0).getColumnName() + " = #{" + underline2Camel(list.get(i).getColumnName(), true) + ",jdbcType=" + list.get(i).getDataTypeName().split(" ")[0] + "}");
+                    bw.write("              " + list.get(i).getColumnName() + " = #{" + underline2Camel(list.get(i).getColumnName(), true) + ",jdbcType=" + list.get(i).getDataTypeName().split(" ")[0] + "}");
                     if (i != list.size() - 1) {
                         bw.write(", ");
                     }
