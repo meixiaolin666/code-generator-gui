@@ -265,7 +265,7 @@ public class CommonUtils {
             writeBufferLine("   </insert>");
             writeBufferLine("   <insert id=\"insertSelective\" parameterType=\"" + list.get(0).getEntityName() + "\">");
             writeBufferLine("       insert into " + list.get(0).getTableName());
-            writeBufferLine("       <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+            writeBufferLine("       <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">");
             for (int i = 0; i < list.size(); i++) {
                 writeBufferLine("           <if test=\"" + underline2Camel(list.get(i).getColumnName(), true) + "!= null\">");
                 writeBufferLine("               " + list.get(i).getColumnName() + ",");
