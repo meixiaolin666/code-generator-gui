@@ -239,6 +239,9 @@ public class CommonUtils {
             writeBufferLine("   <sql id=\"Base_Column_List\">");
             writeBufferLine("       " + list.stream().map(a -> a.getColumnName()).collect(Collectors.joining(", ")));
             writeBufferLine("   </sql>");
+            writeBufferLine("   <sql id=\"Base_Column_List_Entity\">");
+            writeBufferLine("       " + list.stream().map(a -> a.getColumnName()+" "+underline2Camel(a.getColumnName(), true)).collect(Collectors.joining(", ")));
+            writeBufferLine("   </sql>");
             writeBufferLine("   <select id=\"selectByPrimaryKey\" parameterType=\"java.lang." + changeType(list.get(0).getDataTypeName().split(" ")[0], list.get(0).getColumnSize()) + "\" resultMap=\"BaseResultMap\">");
             writeBufferLine("       select");
             writeBufferLine("       <include refid=\"Base_Column_List\" />");
