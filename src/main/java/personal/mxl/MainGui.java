@@ -21,7 +21,7 @@ public class MainGui {
     DatabaseMetaData dbmd;
     Set<String> selectField = new HashSet<>();
     Set<String> selectType = new HashSet<>();
-
+    String codeType;
     public MainGui() {
         JFrame jFrame = new JFrame("代码生成器");
         jFrame.setSize(600, 600);
@@ -65,7 +65,14 @@ public class MainGui {
         jPanel.add(passwordText);
         JLabel schemaLabel = new JLabel("数据库:");
         schemaLabel.setBounds(10, 80, 100, 25);
+        JLabel codeTypeText = new JLabel("选择类型:");
+        codeTypeText.setBounds(170, 510, 100, 25);
+        String [] selected ={"大桥","宠宠"};
+        JComboBox codeTypeBox=new JComboBox(selected);
+        codeTypeBox.setBounds(250, 510, 100, 25);
         jPanel.add(schemaLabel);
+        jPanel.add(codeTypeBox);
+        jPanel.add(codeTypeText);
         final JLabel schemaText = new JLabel();
         schemaText.setBounds(80, 80, 160, 25);
         jPanel.add(schemaText);
@@ -130,17 +137,17 @@ public class MainGui {
         checkBox1.setBounds(200, 510, 90, 25);
         checkBox1.addChangeListener(changeListener);
         checkBox1.setSelected(true);
-        jPanel.add(checkBox1);
+//        jPanel.add(checkBox1);
         JCheckBox checkBox2 = new JCheckBox("Xml");
         checkBox2.setBounds(300, 510, 80, 25);
         checkBox2.addChangeListener(changeListener);
         checkBox2.setSelected(true);
-        jPanel.add(checkBox2);
+//        jPanel.add(checkBox2);
         JCheckBox checkBox3 = new JCheckBox("Entity");
         checkBox3.setBounds(380, 510, 90, 25);
         checkBox3.addChangeListener(changeListener);
         checkBox3.setSelected(true);
-        jPanel.add(checkBox3);
+//        jPanel.add(checkBox3);
         JButton runButton = new JButton("生成代码");
         runButton.setBounds(475, 510, 100, 25);
         runButton.setBackground(greenColor);
@@ -148,6 +155,7 @@ public class MainGui {
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 selectField.clear();
                 int[] rows = table.getSelectedRows();
                 for (int row : rows) {
@@ -157,7 +165,8 @@ public class MainGui {
                     JOptionPane.showMessageDialog(null, "无可生成文件！");
                 } else {
                     try {
-                        CommonUtils.createFiles(selectField, selectType, dbmd, outputText.getText());
+                        codeType=codeTypeBox.getSelectedItem().toString();
+                        CommonUtils.createFiles(selectField, selectType, dbmd, outputText.getText(),codeType);
                     } catch (Exception ex) {
                         CommonUtils.saveErrorLog(outputText.getText(), ex.getMessage());
                         JOptionPane.showMessageDialog(null, "少年，出错了！");

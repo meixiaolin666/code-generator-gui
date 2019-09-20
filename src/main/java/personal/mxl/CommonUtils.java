@@ -130,7 +130,7 @@ public class CommonUtils {
 
     }
 
-    public static void createFiles(Set<String> selectField, Set<String> selectType, DatabaseMetaData dbmd, String outputPath) throws Exception {
+    public static void createFiles(Set<String> selectField, Set<String> selectType, DatabaseMetaData dbmd, String outputPath,String codeType) throws Exception {
         for (String field : selectField) {
             ResultSet rs = dbmd.getColumns(null, null, field, null);
             List<TableInfo> list = new ArrayList<>();
