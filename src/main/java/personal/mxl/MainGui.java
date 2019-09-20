@@ -255,7 +255,7 @@ public class MainGui {
         t5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "欢迎群友来交流！\r\n \r\n 提出宝贵意见！", "关于", JOptionPane.ERROR_MESSAGE, CommonUtils.getIcon());
+                JOptionPane.showMessageDialog(null, "欢迎大家来交流！\r\n \r\n 提出宝贵意见！", "关于", JOptionPane.ERROR_MESSAGE, CommonUtils.getIcon());
             }
         });
         jm1.add(t4);
