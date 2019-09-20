@@ -67,7 +67,7 @@ public class MainGui {
         schemaLabel.setBounds(10, 80, 100, 25);
         JLabel codeTypeText = new JLabel("选择类型:");
         codeTypeText.setBounds(170, 510, 100, 25);
-        String [] selected ={"大桥","宠宠"};
+        String [] selected ={"宠宠","大桥"};
         JComboBox codeTypeBox=new JComboBox(selected);
         codeTypeBox.setBounds(250, 510, 100, 25);
         jPanel.add(schemaLabel);
@@ -266,7 +266,10 @@ public class MainGui {
         jFrame.setJMenuBar(br);
         jFrame.add(jPanel);
         jFrame.setVisible(true);
-
+        Map<String, String> map = CommonUtils.readConfig(outputText.getText());
+        addressText.setText(map.get("url"));
+        userNameText.setText(map.get("user"));
+        passwordText.setText(map.get("pass"));
     }
 
     private void InitGlobalFont() {

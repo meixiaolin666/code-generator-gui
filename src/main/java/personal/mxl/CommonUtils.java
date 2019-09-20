@@ -144,16 +144,18 @@ public class CommonUtils {
                 list.add(new TableInfo(tableName, underline2Camel(tableName, false), columnName, dataTypeName, columnSize, remarks, ordinalPosition));
             }
             list.sort(Comparator.comparing(TableInfo::getOrdinalPosition));
-            for (String type : selectType) {
-                if ("Entity".equals(type)) {
-                    createEntity(list, outputPath);
-                }
-                if ("Mapper".equals(type)) {
-                    createMapper(list.get(0), outputPath);
-                }
-                if ("Xml".equals(type)) {
-                    createXml(list, outputPath);
-                }
+            if("大桥".equals(codeType)){
+	            createEntity(list, outputPath);
+	            createMapper(list.get(0), outputPath);
+	            createXml(list, outputPath);
+            }else if("宠宠".equals(codeType)){
+            	createController_tk(list.get(0), outputPath);
+            	createBiz_tk(list.get(0), outputPath);
+            	createMapper_tk(list.get(0), outputPath);
+            	createXml_tk(list, outputPath);
+            	createEntity_tk(list, outputPath);
+            }else {
+				throw new Exception("生成代码类型错误！");
             }
         }
     }
@@ -169,7 +171,7 @@ public class CommonUtils {
     }
 
     private static void createMapper(TableInfo tableInfo, String outputPath) throws Exception {
-        initBufferedWriter(outputPath + "/" + tableInfo.getEntityName() + "/" + tableInfo.getEntityName() + "Mapper.java");
+        initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.java");
 
         bw.newLine();
         writeBufferLine("public interface " + tableInfo.getEntityName() + "Mapper {");
@@ -194,7 +196,7 @@ public class CommonUtils {
 
     private static void createEntity(List<TableInfo> list, String outputPath) throws Exception {
         if (list.size() > 0) {
-            initBufferedWriter(outputPath + "/" + list.get(0).getEntityName() + "/" + list.get(0).getEntityName() + ".java");
+            initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + ".java");
             writeBufferLine("import java.util.Date;");
             bw.newLine();
             writeBufferLine("public class " + list.get(0).getEntityName() + " {");
@@ -223,7 +225,7 @@ public class CommonUtils {
 
     private static void createXml(List<TableInfo> list, String outputPath) throws Exception {
         if (list.size() > 0) {
-            initBufferedWriter(outputPath + "/" + list.get(0).getEntityName() + "/" + list.get(0).getEntityName() + "Mapper.xml");
+            initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + "Mapper.xml");
             writeBufferLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             writeBufferLine("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
             writeBufferLine("<mapper namespace=\"" + list.get(0).getEntityName() + "Mapper\">");
@@ -317,7 +319,132 @@ public class CommonUtils {
 
     }
 
-    private static void initBufferedWriter(String filePath) throws Exception {
+	private static void createEntity_tk(List<TableInfo> list, String outputPath) throws Exception {
+		if (list.size() > 0) {
+			initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + ".java");
+			writeBufferLine("package com.yule.chongchong.api." + list.get(0).getTableName() + ";");
+			bw.newLine();
+			writeBufferLine("import lombok.Data;");
+			writeBufferLine("import javax.persistence.Column;");
+			writeBufferLine("import javax.persistence.Id;");
+			writeBufferLine("import javax.persistence.Table;");
+			writeBufferLine("import javax.validation.constraints.*;");
+			writeBufferLine("import java.util.Date;");
+			bw.newLine();
+			writeBufferLine("@Data");
+			writeBufferLine("@Table(name=\"" + list.get(0).getEntityName() + "\")");
+			writeBufferLine("public class " + list.get(0).getEntityName() + " {");
+			for (int i = 0; i < list.size(); i++) {
+				writeBufferLine("    /**");
+				writeBufferLine("     * " + list.get(i).getRemarks());
+				writeBufferLine("     */");
+				if (i == 0) {
+					writeBufferLine("    @Id");
+				}
+				writeBufferLine("    @Column(name = \"" + list.get(i).getColumnName() + "\")");
+				writeBufferLine("    private " + changeType(list.get(i).getDataTypeName(), list.get(i).getColumnSize()) + " " + underline2Camel(list.get(i).getColumnName(), true) + ";");
+				bw.newLine();
+			}
+			writeBufferLine("}");
+			bw.flush();
+			bw.close();
+		}
+	}
+
+	private static void createMapper_tk(TableInfo tableInfo,String outputPath ) throws Exception {
+		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.java");
+		writeBufferLine("package com.yule.chongchong.api." + tableInfo.getTableName() + ";");
+		bw.newLine();
+		writeBufferLine("import tk.mybatis.mapper.common.Mapper;");
+		writeBufferLine("@org.apache.ibatis.annotations.Mapper");
+		bw.newLine();
+		writeBufferLine("public interface " + tableInfo.getEntityName() +"Mapper extends Mapper<" + tableInfo.getEntityName() + "> {");
+		bw.newLine();
+		writeBufferLine("}");
+		bw.flush();
+		bw.close();
+
+	}
+
+	private static void createXml_tk(List<TableInfo> list, String outputPath) throws Exception {
+		if (list.size() > 0) {
+			initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + "Mapper.xml");
+			writeBufferLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			writeBufferLine("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
+			writeBufferLine("<mapper namespace=\"" + list.get(0).getEntityName() + "Mapper\">");
+			writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.chongchong.api."+underline2Camel(list.get(0).getTableName(), true)+"."+list.get(0).getEntityName()+"\">");
+			for (int i = 0; i < list.size(); i++) {
+				if (i == 0) {
+					writeBufferLine("       <id column=\"" + list.get(i).getColumnName() + "\" jdbcType=\"" + list.get(i).getDataTypeName().split(" ")[0] + "\" property=\"" + underline2Camel(list.get(i).getColumnName(), true) + "\" />");
+				} else {
+					writeBufferLine("       <result column=\"" + list.get(i).getColumnName() + "\" jdbcType=\"" + list.get(i).getDataTypeName().split(" ")[0] + "\" property=\"" + underline2Camel(list.get(i).getColumnName(), true) + "\" />");
+				}
+			}
+			writeBufferLine("   </resultMap>");
+			writeBufferLine("</mapper>");
+			bw.flush();
+			bw.close();
+		}
+
+
+	}
+
+	private static void createBiz_tk(TableInfo tableInfo,String outputPath ) throws Exception {
+		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Biz.java");
+		writeBufferLine("package com.yule.chongchong.api." + tableInfo.getTableName() + ";");
+		bw.newLine();
+		writeBufferLine("import com.yule.chongchong.common.base.BaseBiz;");
+		writeBufferLine("import org.springframework.beans.factory.annotation.Autowired;");
+		writeBufferLine("import org.springframework.stereotype.Service;");
+		writeBufferLine("import org.springframework.transaction.annotation.Transactional;");
+		bw.newLine();
+		writeBufferLine("@Service");
+		writeBufferLine("@Transactional(rollbackFor = Exception.class)");
+		writeBufferLine("public class "+tableInfo.getEntityName()+"Biz extends BaseBiz<"+tableInfo.getEntityName()+"Mapper, "+tableInfo.getEntityName()+"> {");
+		bw.newLine();
+		writeBufferLine("   @Autowired");
+		writeBufferLine("   "+tableInfo.getEntityName()+"Mapper "+underline2Camel(tableInfo.getTableName(), true) +"Mapper;");
+		bw.newLine();
+		writeBufferLine("}");
+		bw.flush();
+		bw.close();
+
+	}
+
+	private static void createController_tk(TableInfo tableInfo, String outputPath) throws Exception {
+		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Controller.java");
+		writeBufferLine("package com.yule.chongchong.api." + tableInfo.getTableName() + ";");
+		bw.newLine();
+		writeBufferLine("import com.yule.chongchong.common.base.BaseController;");
+		writeBufferLine("import com.yule.chongchong.common.base.BaseResponse;");
+		writeBufferLine("import io.swagger.annotations.ApiOperation;");
+		writeBufferLine("import io.swagger.annotations.ApiResponse;");
+		writeBufferLine("import io.swagger.annotations.ApiResponses;");
+		writeBufferLine("import org.springframework.beans.factory.annotation.Autowired;");
+		writeBufferLine("import org.springframework.validation.annotation.Validated;");
+		writeBufferLine("import org.springframework.web.bind.annotation.*;");
+		bw.newLine();
+		writeBufferLine("@RestController");
+		writeBufferLine("@RequestMapping(\"/"+underline2Camel(tableInfo.getTableName(), true)+"\")");
+		writeBufferLine("public class "+tableInfo.getEntityName()+"Controller extends BaseController {");
+		bw.newLine();
+		writeBufferLine("   @Autowired");
+		writeBufferLine("   "+tableInfo.getEntityName()+"Biz "+underline2Camel(tableInfo.getTableName(), true) +"Biz;");
+		bw.newLine();
+		writeBufferLine("   @ApiOperation(value = \"demo\", notes = \"demo\")");
+		writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
+		writeBufferLine("   @RequestMapping(value = \"/demo\", method = RequestMethod.POST)");
+		writeBufferLine("   @ResponseBody");
+		writeBufferLine("   public BaseResponse demo( @RequestBody @Validated  "+tableInfo.getEntityName()+" "+underline2Camel(tableInfo.getTableName(), true)+")  {");
+		writeBufferLine("       return BaseResponse.success();");
+		writeBufferLine("   }");
+		writeBufferLine("}");
+		bw.flush();
+		bw.close();
+
+	}
+
+	private static void initBufferedWriter(String filePath) throws Exception {
         File file = new File(filePath.substring(0, filePath.lastIndexOf("/")));
         if (!file.exists()) {
             file.mkdir();
