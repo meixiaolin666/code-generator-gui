@@ -172,7 +172,7 @@ public class CommonUtils {
 
     private static void createMapper(TableInfo tableInfo, String outputPath) throws Exception {
         initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.java");
-
+	    writeBufferLine("import domain."+tableInfo.getEntityName()+";");
         bw.newLine();
         writeBufferLine("public interface " + tableInfo.getEntityName() + "Mapper {");
         bw.newLine();
@@ -228,8 +228,8 @@ public class CommonUtils {
             initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + "Mapper.xml");
             writeBufferLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             writeBufferLine("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
-            writeBufferLine("<mapper namespace=\"" + list.get(0).getEntityName() + "Mapper\">");
-            writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"" + list.get(0).getEntityName() + "\">");
+            writeBufferLine("<mapper namespace=\"com.qd.mapper." + list.get(0).getEntityName() + "Mapper\">");
+            writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"domain." + list.get(0).getEntityName() + "\">");
             for (int i = 0; i < list.size(); i++) {
                 if (i == 0) {
                     writeBufferLine("       <id column=\"" + list.get(i).getColumnName() + "\" jdbcType=\"" + list.get(i).getDataTypeName().split(" ")[0] + "\" property=\"" + underline2Camel(list.get(i).getColumnName(), true) + "\" />");
