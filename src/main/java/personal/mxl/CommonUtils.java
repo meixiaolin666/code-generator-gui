@@ -254,7 +254,7 @@ public class CommonUtils {
             writeBufferLine("       delete from " + list.get(0).getTableName());
             writeBufferLine("       where " + list.get(0).getColumnName() + " = #{" + underline2Camel(list.get(0).getColumnName(), true) + ",jdbcType=" + list.get(0).getDataTypeName().split(" ")[0] + "}");
             writeBufferLine("   </delete>");
-            writeBufferLine("   <insert id=\"insert\" parameterType=\"" + list.get(0).getEntityName() + "\">");
+            writeBufferLine("   <insert id=\"insert\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
             writeBufferLine("       insert into " + list.get(0).getTableName() + "(");
             writeBufferLine("           " + list.stream().map(a -> a.getColumnName()).collect(Collectors.joining(", ")));
             writeBufferLine("       )");
@@ -268,7 +268,7 @@ public class CommonUtils {
             }
             writeBufferLine("       )");
             writeBufferLine("   </insert>");
-            writeBufferLine("   <insert id=\"insertSelective\" parameterType=\"" + list.get(0).getEntityName() + "\">");
+            writeBufferLine("   <insert id=\"insertSelective\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
             writeBufferLine("       insert into " + list.get(0).getTableName());
             writeBufferLine("       <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">");
             for (int i = 0; i < list.size(); i++) {
@@ -285,7 +285,7 @@ public class CommonUtils {
             }
             writeBufferLine("       </trim>");
             writeBufferLine("   </insert>");
-            writeBufferLine("   <update id=\"updateByPrimaryKey\" parameterType=\"" + list.get(0).getEntityName() + "\">");
+            writeBufferLine("   <update id=\"updateByPrimaryKey\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
             writeBufferLine("       update " + list.get(0).getTableName() + " set");
             for (int i = 0; i < list.size(); i++) {
                 if (i != 0) {
@@ -298,7 +298,7 @@ public class CommonUtils {
             }
             writeBufferLine("       where " + list.get(0).getColumnName() + " = #{" + underline2Camel(list.get(0).getColumnName(), true) + ",jdbcType=" + list.get(0).getDataTypeName().split(" ")[0] + "}");
             writeBufferLine("   </update>");
-            writeBufferLine("   <update id=\"updateByPrimaryKeySelective\" parameterType=\"" + list.get(0).getEntityName() + "\">");
+            writeBufferLine("   <update id=\"updateByPrimaryKeySelective\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
             writeBufferLine("       update " + list.get(0).getTableName());
             writeBufferLine("       <set>");
             for (int i = 0; i < list.size(); i++) {
