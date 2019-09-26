@@ -270,14 +270,14 @@ public class CommonUtils {
             writeBufferLine("   </insert>");
             writeBufferLine("   <insert id=\"insertSelective\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
             writeBufferLine("       insert into " + list.get(0).getTableName());
-            writeBufferLine("       <trim prefix=\"values (\" suffix=\")\" suffixOverrides=\",\">");
+            writeBufferLine("       <trim prefix=\" (\" suffix=\")\" suffixOverrides=\",\">");
             for (int i = 0; i < list.size(); i++) {
                 writeBufferLine("           <if test=\"" + underline2Camel(list.get(i).getColumnName(), true) + "!= null\">");
                 writeBufferLine("               " + list.get(i).getColumnName() + ",");
                 writeBufferLine("           </if>");
             }
             writeBufferLine("       </trim>");
-            writeBufferLine("       <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
+            writeBufferLine("       <trim prefix=\"values(\" suffix=\")\" suffixOverrides=\",\">");
             for (int i = 0; i < list.size(); i++) {
                 writeBufferLine("           <if test=\"" + underline2Camel(list.get(i).getColumnName(), true) + "!= null\">");
                 writeBufferLine("               #{" + underline2Camel(list.get(i).getColumnName(), true) + ",jdbcType=" + list.get(i).getDataTypeName().split(" ")[0] + "},");
