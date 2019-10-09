@@ -161,6 +161,7 @@ public class CommonUtils {
 			} else {
 				throw new Exception("生成代码类型错误！");
 			}
+			closeBufferedWriter();
 		}
 	}
 
@@ -591,6 +592,14 @@ public class CommonUtils {
 		}
 		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFile, true), "UTF-8"));
 	}
+	private static void closeBufferedWriter() throws Exception {
+		try{
+			bw.close();
+		}catch (Exception e){}
+
+
+	}
+
 
 	private static String changeType(String type, int length) {
 		if (type.equals("BIT")) {
