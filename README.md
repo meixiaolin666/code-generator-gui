@@ -3,6 +3,6 @@
  可链接数据库批量生成Mapper、Xml、Entity、service、controller 
 
 
-![Image](1566977925(1).png)
+![Image](1566977925.png)
 
  可以单独下载code-generator-gui-1.0.jar和run.bat 然后运行run.bat
