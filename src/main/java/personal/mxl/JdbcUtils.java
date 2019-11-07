@@ -68,6 +68,7 @@ public  class JdbcUtils {
         Class.forName("com.mysql.jdbc.Driver");
         Properties props =new Properties();
         props.put("remarksReporting","true");
+        props.put("useInformationSchema","true");
         props.put("user", USER);
         props.put("password", PASS);
         conn =DriverManager.getConnection(URL,props);
