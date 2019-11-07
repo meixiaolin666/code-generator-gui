@@ -180,6 +180,7 @@ public class CommonUtils {
 		writeBufferLine("package com.qd.api;");
 		bw.newLine();
 		writeBufferLine("import dto." + tableInfo.getEntityName() + "Dto;");
+		writeBufferLine("import domain." + tableInfo.getEntityName()+";");
 		writeBufferLine("import dto.ResponseBodyDto;");
 		writeBufferLine("import com.qd.service."+tableInfo.getEntityName()+"Service;");
 		writeBufferLine("import io.swagger.annotations.*;");
@@ -206,12 +207,34 @@ public class CommonUtils {
 		writeBufferLine("   public ResponseBodyDto select" + tableInfo.getEntityName() + "( Long taskId, Long bridgeId )  {");
 		writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.select" + tableInfo.getEntityName() + "(taskId,bridgeId));");
 		writeBufferLine("   }");
+
+		writeBufferLine("   @ApiOperation(value = \"分页查询\", notes = \"分页查询\")");
+		writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = ResponseBodyDto.class)})\n");
+		writeBufferLine("       @ApiImplicitParams({");
+		writeBufferLine("            @ApiImplicitParam(name = \"taskId\", value = \"项目id\", dataType = \"Long\", paramType = \"query\", example = \"1\", required = true),");
+		writeBufferLine("            @ApiImplicitParam(name = \"bridgeId\", value = \"桥梁id\", dataType = \"Long\", paramType = \"query\", example = \"1\", required = true),");
+		writeBufferLine("            @ApiImplicitParam(name = \"currentPage\", value = \"当前页\", dataType = \"Integer\", paramType = \"query\", example = \"1\", required = true),");
+		writeBufferLine("            @ApiImplicitParam(name = \"pageSize\", value = \"每页条数\", dataType = \"Integer\", paramType = \"query\", example = \"10\", required = true)");
+		writeBufferLine("   })");
+		writeBufferLine("   @RequestMapping(value = \"/select" + tableInfo.getEntityName() + "Paging\", method = RequestMethod.GET)");
+		writeBufferLine("   @ResponseBody");
+		writeBufferLine("   public ResponseBodyDto select" + tableInfo.getEntityName() + "Paging(Integer currentPage, Integer pageSize, Long taskId, Long bridgeId )  {");
+		writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.select" + tableInfo.getEntityName() + "Paging(currentPage,pageSize,taskId,bridgeId));");
+		writeBufferLine("   }");
+
+		writeBufferLine("   @ApiOperation(value = \"批量保存\", notes = \"批量保存\")");
+		writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = ResponseBodyDto.class)})");
+		writeBufferLine("   @RequestMapping(value = \"/save" + tableInfo.getEntityName() + "List\", method = RequestMethod.POST)");
+		writeBufferLine("   @ResponseBody");
+		writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "List( @RequestBody " + tableInfo.getEntityName() + "Dto " + underline2Camel(tableInfo.getTableName(), true) + "Dto )  {");
+		writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.save" + tableInfo.getEntityName() + "List(" + underline2Camel(tableInfo.getTableName(), true) + "Dto.get" + tableInfo.getEntityName() + "List()));");
+		writeBufferLine("   }");
 		writeBufferLine("   @ApiOperation(value = \"保存\", notes = \"保存\")");
 		writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = ResponseBodyDto.class)})");
 		writeBufferLine("   @RequestMapping(value = \"/save" + tableInfo.getEntityName() + "\", method = RequestMethod.POST)");
 		writeBufferLine("   @ResponseBody");
-		writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "( @RequestBody " + tableInfo.getEntityName() + "Dto " + underline2Camel(tableInfo.getTableName(), true) + "Dto )  {");
-		writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.save" + tableInfo.getEntityName() + "(" + underline2Camel(tableInfo.getTableName(), true) + "Dto.get" + tableInfo.getEntityName() + "List()));");
+		writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "( @RequestBody " + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + " )  {");
+		writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.save" + tableInfo.getEntityName() + "(" +underline2Camel(tableInfo.getTableName(), true) + "));");
 		writeBufferLine("   }");
 		writeBufferLine("}");
 		bw.flush();
@@ -225,11 +248,15 @@ public class CommonUtils {
 		bw.newLine();
 		writeBufferLine("import domain." + tableInfo.getEntityName()+";");
 		writeBufferLine("import java.util.List;");
+		writeBufferLine("import com.github.pagehelper.PageInfo;");
 		writeBufferLine("import dto.ResponseBodyDto;");
+
 		bw.newLine();
 		writeBufferLine("public interface " + tableInfo.getEntityName() + "Service{");
 		writeBufferLine("   List<" + tableInfo.getEntityName() + "> select" + tableInfo.getEntityName() + "(Long taskId, Long bridgeId);");
-		writeBufferLine("   ResponseBodyDto save" + tableInfo.getEntityName() + "(List<" + tableInfo.getEntityName() + "> list);");
+		writeBufferLine("   PageInfo<" + tableInfo.getEntityName() + "> select" + tableInfo.getEntityName() + "Paging(Integer currentPage, Integer pageSize,Long taskId, Long bridgeId);");
+		writeBufferLine("   ResponseBodyDto save" + tableInfo.getEntityName() + "("+tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true)+");");
+		writeBufferLine("   ResponseBodyDto save" + tableInfo.getEntityName() + "List(List<" + tableInfo.getEntityName() + "> list);");
 		writeBufferLine("}");
 		bw.flush();
 		bw.close();
@@ -244,6 +271,8 @@ public class CommonUtils {
 		writeBufferLine("import com.qd.service." + tableInfo.getEntityName() + "Service" + ";");
 		writeBufferLine("import dto.ResponseBodyDto;");
 		writeBufferLine("import org.springframework.stereotype.Service;");
+		writeBufferLine("import com.github.pagehelper.PageHelper;");
+		writeBufferLine("import com.github.pagehelper.PageInfo;");
 		writeBufferLine("import javax.annotation.Resource;");
 		bw.newLine();
 		writeBufferLine("import java.util.List;");
@@ -256,11 +285,33 @@ public class CommonUtils {
 		bw.newLine();
 		writeBufferLine("   @Override");
 		writeBufferLine("   public List<" + tableInfo.getEntityName() + "> select" + tableInfo.getEntityName() + "(Long taskId, Long bridgeId) {");
-		writeBufferLine("       return " + underline2Camel(tableInfo.getTableName(), true) + "Mapper.selectByTaskIdAndbridgeId(taskId, bridgeId);");
+		writeBufferLine("       return " + underline2Camel(tableInfo.getTableName(), true) + "Mapper.selectByTaskIdAndBridgeId(taskId, bridgeId);");
 		writeBufferLine("   }");
 		bw.newLine();
 		writeBufferLine("   @Override");
-		writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "(List<" + tableInfo.getEntityName() + "> list) {");
+		writeBufferLine("   public PageInfo<" + tableInfo.getEntityName() + "> select" + tableInfo.getEntityName() + "Paging(Integer currentPage, Integer pageSize,Long taskId, Long bridgeId) {");
+		writeBufferLine("      return PageHelper.startPage(currentPage, pageSize).doSelectPageInfo(() ->  " + underline2Camel(tableInfo.getTableName(), true) + "Mapper.selectByTaskIdAndBridgeId(taskId, bridgeId));");
+		writeBufferLine("   }");
+		bw.newLine();
+		writeBufferLine("   @Override");
+		writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "("+tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true)+") {");
+		writeBufferLine("       ResponseBodyDto responseBodyDto = new ResponseBodyDto();");
+		writeBufferLine("       try {");
+		writeBufferLine("               if (null == " + underline2Camel(tableInfo.getTableName(), true) + ".getId()) {");
+		writeBufferLine("                 " + underline2Camel(tableInfo.getTableName(), true) + "Mapper.insertSelective(" + underline2Camel(tableInfo.getTableName(), true) + ");");
+		writeBufferLine("               } else {");
+		writeBufferLine("                   " + underline2Camel(tableInfo.getTableName(), true) + "Mapper.updateByPrimaryKeySelective(" + underline2Camel(tableInfo.getTableName(), true) + ");");
+		writeBufferLine("               }");
+		writeBufferLine("           } catch (Exception e) {");
+		writeBufferLine("               e.printStackTrace();");
+		writeBufferLine("               responseBodyDto.setCode(2001);");
+		writeBufferLine("               responseBodyDto.setData(\"保存失败\");");
+		writeBufferLine("           }");
+		writeBufferLine("       return responseBodyDto;");
+		writeBufferLine("   }");
+
+		writeBufferLine("   @Override");
+		writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "List(List<" + tableInfo.getEntityName() + "> list) {");
 		writeBufferLine("       ResponseBodyDto responseBodyDto = new ResponseBodyDto();");
 		writeBufferLine("       List<String> error = new ArrayList<>();");
 		writeBufferLine("       if (null == list) {");
@@ -275,7 +326,7 @@ public class CommonUtils {
 		writeBufferLine("               }");
 		writeBufferLine("           } catch (Exception e) {");
 		writeBufferLine("                   e.printStackTrace();");
-		writeBufferLine("                   error.add(\"添加失败\");");
+		writeBufferLine("                   error.add(\"保存失败\");");
 		writeBufferLine("           }");
 		writeBufferLine("       }");
 		writeBufferLine("       if (error.size() > 0) {");
@@ -293,6 +344,7 @@ public class CommonUtils {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Dto.java");
 		writeBufferLine("package dto;");
 		writeBufferLine("import domain." + tableInfo.getEntityName() + ";");
+		writeBufferLine("import java.util.List;");
 		bw.newLine();
 		writeBufferLine("public class " + tableInfo.getEntityName() + "Dto {");
 		writeBufferLine("   private List<" + tableInfo.getEntityName() + "> " + underline2Camel(tableInfo.getTableName(), true) + "List;");
@@ -305,6 +357,8 @@ public class CommonUtils {
 		writeBufferLine("       this." + underline2Camel(tableInfo.getTableName(), true) + "List = " + underline2Camel(tableInfo.getTableName(), true) + "List;");
 		writeBufferLine("   }");
 		writeBufferLine("}");
+		bw.flush();
+		bw.close();
 	}
 
 	private static void createMapper(TableInfo tableInfo, String outputPath) throws Exception {
@@ -320,6 +374,8 @@ public class CommonUtils {
 		writeBufferLine("    int insertSelective(" + tableInfo.getEntityName() + " record);");
 		bw.newLine();
 		writeBufferLine("    " + tableInfo.getEntityName() + " selectByPrimaryKey(" + changeType(tableInfo.getDataTypeName(), tableInfo.getColumnSize()) + " " + underline2Camel(tableInfo.getColumnName(), true) + ");");
+		bw.newLine();
+		writeBufferLine("    List<"+tableInfo.getEntityName()+"> selectByTaskIdAndBridgeId(@Param(\"taskId\") Long taskId, @Param(\"bridgeId\") Long bridgeId);");
 		bw.newLine();
 		writeBufferLine("    int updateByPrimaryKeySelective(" + tableInfo.getEntityName() + " record);");
 		bw.newLine();
@@ -387,11 +443,20 @@ public class CommonUtils {
 			writeBufferLine("       from " + list.get(0).getTableName());
 			writeBufferLine("       where " + list.get(0).getColumnName() + " = #{" + underline2Camel(list.get(0).getColumnName(), true) + ",jdbcType=" + list.get(0).getDataTypeName().split(" ")[0] + "}");
 			writeBufferLine("   </select>");
+			writeBufferLine("   <select id=\"selectByTaskIdAndBridgeId\" resultType=\"domain."+list.get(0).getEntityName()+"\">");
+			writeBufferLine("       select");
+			writeBufferLine("       <include refid=\"Base_Column_List_Entity\"/>");
+			writeBufferLine("       from " + list.get(0).getTableName());
+			writeBufferLine("       where task_id = #{taskId,jdbcType=BIGINT}");
+			writeBufferLine("       and bridge_id=#{bridgeId,jdbcType=BIGINT}");
+			writeBufferLine("       and is_delete = 0");
+			writeBufferLine("   </select>");
 			writeBufferLine("   <delete id=\"deleteByPrimaryKey\" parameterType=\"java.lang." + changeType(list.get(0).getDataTypeName().split(" ")[0], list.get(0).getColumnSize()) + "\">");
 			writeBufferLine("       delete from " + list.get(0).getTableName());
 			writeBufferLine("       where " + list.get(0).getColumnName() + " = #{" + underline2Camel(list.get(0).getColumnName(), true) + ",jdbcType=" + list.get(0).getDataTypeName().split(" ")[0] + "}");
 			writeBufferLine("   </delete>");
-			writeBufferLine("   <insert id=\"insert\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
+			writeBufferLine("   <insert id=\"insert\" parameterType=\"domain." + list.get(0).getEntityName() + "\" useGeneratedKeys=\"true\"\n" +
+					"            keyProperty=\"id\">");
 			writeBufferLine("       insert into " + list.get(0).getTableName() + "(");
 			writeBufferLine("           " + list.stream().map(a -> a.getColumnName()).collect(Collectors.joining(", ")));
 			writeBufferLine("       )");
@@ -405,7 +470,8 @@ public class CommonUtils {
 			}
 			writeBufferLine("       )");
 			writeBufferLine("   </insert>");
-			writeBufferLine("   <insert id=\"insertSelective\" parameterType=\"domain." + list.get(0).getEntityName() + "\">");
+			writeBufferLine("   <insert id=\"insertSelective\" parameterType=\"domain." + list.get(0).getEntityName() + "\" useGeneratedKeys=\"true\"\n" +
+					"            keyProperty=\"id\">");
 			writeBufferLine("       insert into " + list.get(0).getTableName());
 			writeBufferLine("       <trim prefix=\" (\" suffix=\")\" suffixOverrides=\",\">");
 			for (int i = 0; i < list.size(); i++) {
