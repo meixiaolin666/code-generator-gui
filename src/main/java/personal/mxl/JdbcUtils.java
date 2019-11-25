@@ -71,7 +71,8 @@ public  class JdbcUtils {
         props.put("useInformationSchema","true");
         props.put("user", USER);
         props.put("password", PASS);
-        conn =DriverManager.getConnection(URL,props);
+        props.put("characterEncoding","utf8");
+    conn =DriverManager.getConnection(URL,props);
         return conn.getMetaData();
     }
 
