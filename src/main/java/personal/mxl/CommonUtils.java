@@ -364,6 +364,8 @@ public class CommonUtils {
 	private static void createMapper(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.java");
 		writeBufferLine("import domain." + tableInfo.getEntityName() + ";");
+		writeBufferLine("import org.apache.ibatis.annotations.Param;");
+		writeBufferLine("import java.util.List;");
 		bw.newLine();
 		writeBufferLine("public interface " + tableInfo.getEntityName() + "Mapper {");
 		bw.newLine();
@@ -525,7 +527,7 @@ public class CommonUtils {
 	private static void createEntity_tk(List<TableInfo> list, String outputPath) throws Exception {
 		if (list.size() > 0) {
 			initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + ".java");
-			writeBufferLine("package com.yule.chongchong.api." + list.get(0).getTableName() + ";");
+			writeBufferLine("package com.yule.zu.api." + list.get(0).getTableName() + ";");
 			bw.newLine();
 			writeBufferLine("import lombok.Data;");
 			writeBufferLine("import javax.persistence.Column;");
@@ -556,7 +558,7 @@ public class CommonUtils {
 
 	private static void createMapper_tk(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.java");
-		writeBufferLine("package com.yule.chongchong.api." + tableInfo.getTableName() + ";");
+		writeBufferLine("package com.yule.zu.api." + tableInfo.getTableName() + ";");
 		bw.newLine();
 		writeBufferLine("import tk.mybatis.mapper.common.Mapper;");
 		writeBufferLine("@org.apache.ibatis.annotations.Mapper");
@@ -575,7 +577,7 @@ public class CommonUtils {
 			writeBufferLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			writeBufferLine("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
 			writeBufferLine("<mapper namespace=\"" + list.get(0).getEntityName() + "Mapper\">");
-			writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.chongchong.api." + underline2Camel(list.get(0).getTableName(), true) + "." + list.get(0).getEntityName() + "\">");
+			writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.zu.api." + underline2Camel(list.get(0).getTableName(), true) + "." + list.get(0).getEntityName() + "\">");
 			for (int i = 0; i < list.size(); i++) {
 				if (i == 0) {
 					writeBufferLine("       <id column=\"" + list.get(i).getColumnName() + "\" jdbcType=\"" + list.get(i).getDataTypeName().split(" ")[0] + "\" property=\"" + underline2Camel(list.get(i).getColumnName(), true) + "\" />");
@@ -594,9 +596,9 @@ public class CommonUtils {
 
 	private static void createBiz_tk(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Biz.java");
-		writeBufferLine("package com.yule.chongchong.api." + tableInfo.getTableName() + ";");
+		writeBufferLine("package com.yule.zu.api." + tableInfo.getTableName() + ";");
 		bw.newLine();
-		writeBufferLine("import com.yule.chongchong.common.base.BaseBiz;");
+		writeBufferLine("import com.yule.zu.common.base.BaseBiz;");
 		writeBufferLine("import org.springframework.beans.factory.annotation.Autowired;");
 		writeBufferLine("import org.springframework.stereotype.Service;");
 		writeBufferLine("import org.springframework.transaction.annotation.Transactional;");
@@ -616,10 +618,10 @@ public class CommonUtils {
 
 	private static void createController_tk(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Controller.java");
-		writeBufferLine("package com.yule.chongchong.api." + tableInfo.getTableName() + ";");
+		writeBufferLine("package com.yule.zu.api." + tableInfo.getTableName() + ";");
 		bw.newLine();
-		writeBufferLine("import com.yule.chongchong.common.base.BaseController;");
-		writeBufferLine("import com.yule.chongchong.common.base.BaseResponse;");
+		writeBufferLine("import com.yule.zu.common.base.BaseController;");
+		writeBufferLine("import com.yule.zu.common.base.BaseResponse;");
 		writeBufferLine("import io.swagger.annotations.ApiOperation;");
 		writeBufferLine("import io.swagger.annotations.ApiResponse;");
 		writeBufferLine("import io.swagger.annotations.ApiResponses;");
