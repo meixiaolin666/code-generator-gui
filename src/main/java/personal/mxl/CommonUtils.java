@@ -130,8 +130,15 @@ public class CommonUtils {
 
 	}
 
-	public static void createFiles(Set<String> selectField, Set<String> selectType, DatabaseMetaData dbmd, String outputPath, String codeType) throws Exception {
-		for (String field : selectField) {
+	public static void createFiles(Set<String> selectTable, Set<String> selectType, DatabaseMetaData dbmd, String outputPath, String codeType) throws Exception {
+		for (String field : selectTable) {
+			Map<String,String> map=new HashMap<>();
+			ResultSet tablesRs = dbmd.getTables(null, null, null, new String[]{"TABLE", "VIEW"});
+			while (tablesRs.next()) {
+				String tableName = tablesRs.getString("TABLE_NAME");
+				String remarks = tablesRs.getString("REMARKS");
+				map.put(tableName,remarks);
+			}
 			ResultSet rs = dbmd.getColumns(null, null, field, null);
 			List<TableInfo> list = new ArrayList<>();
 			while (rs.next()) {
@@ -140,11 +147,11 @@ public class CommonUtils {
 				String dataTypeName = rs.getString("TYPE_NAME");
 				int ordinalPosition = rs.getInt("ORDINAL_POSITION");
 				int columnSize = rs.getInt("COLUMN_SIZE");
-				String remarks = rs.getString("REMARKS");
+				String remarks = map.get(tableName);
 				list.add(new TableInfo(tableName, underline2Camel(tableName, false), columnName, dataTypeName, columnSize, remarks, ordinalPosition));
 			}
 			list.sort(Comparator.comparing(TableInfo::getOrdinalPosition));
-			if ("大桥".equals(codeType)) {
+			if ("定期检测".equals(codeType)) {
 				createController(list.get(0),outputPath);
 				createService(list.get(0),outputPath);
 				createServiceImpl(list.get(0),outputPath);
@@ -152,7 +159,7 @@ public class CommonUtils {
 				createEntity(list, outputPath);
 				createMapper(list.get(0), outputPath);
 				createXml(list, outputPath);
-			} else if ("宠宠".equals(codeType)) {
+			} else if ("健康监测".equals(codeType)) {
 				createController_tk(list.get(0), outputPath);
 				createBiz_tk(list.get(0), outputPath);
 				createMapper_tk(list.get(0), outputPath);
@@ -527,7 +534,7 @@ public class CommonUtils {
 	private static void createEntity_tk(List<TableInfo> list, String outputPath) throws Exception {
 		if (list.size() > 0) {
 			initBufferedWriter(outputPath + "/" + underline2Camel(list.get(0).getTableName(), true) + "/" + list.get(0).getEntityName() + ".java");
-			writeBufferLine("package com.yule.zu.api." + list.get(0).getTableName() + ";");
+			writeBufferLine("package com.yule.bhms.api." + list.get(0).getTableName() + ";");
 			bw.newLine();
 			writeBufferLine("import lombok.Data;");
 			writeBufferLine("import javax.persistence.Column;");
@@ -537,7 +544,7 @@ public class CommonUtils {
 			writeBufferLine("import java.util.Date;");
 			bw.newLine();
 			writeBufferLine("@Data");
-			writeBufferLine("@Table(name=\"" + list.get(0).getEntityName() + "\")");
+			writeBufferLine("@Table(name=\"" + list.get(0).getTableName() + "\")");
 			writeBufferLine("public class " + list.get(0).getEntityName() + " {");
 			for (int i = 0; i < list.size(); i++) {
 				writeBufferLine("    /**");
@@ -558,7 +565,7 @@ public class CommonUtils {
 
 	private static void createMapper_tk(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.java");
-		writeBufferLine("package com.yule.zu.api." + tableInfo.getTableName() + ";");
+		writeBufferLine("package com.yule.bhms.api." + tableInfo.getTableName() + ";");
 		bw.newLine();
 		writeBufferLine("import tk.mybatis.mapper.common.Mapper;");
 		writeBufferLine("@org.apache.ibatis.annotations.Mapper");
@@ -577,7 +584,7 @@ public class CommonUtils {
 			writeBufferLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			writeBufferLine("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
 			writeBufferLine("<mapper namespace=\"" + list.get(0).getEntityName() + "Mapper\">");
-			writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.zu.api." + underline2Camel(list.get(0).getTableName(), true) + "." + list.get(0).getEntityName() + "\">");
+			writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.bhms.api." + underline2Camel(list.get(0).getTableName(), true) + "." + list.get(0).getEntityName() + "\">");
 			for (int i = 0; i < list.size(); i++) {
 				if (i == 0) {
 					writeBufferLine("       <id column=\"" + list.get(i).getColumnName() + "\" jdbcType=\"" + list.get(i).getDataTypeName().split(" ")[0] + "\" property=\"" + underline2Camel(list.get(i).getColumnName(), true) + "\" />");
@@ -596,9 +603,9 @@ public class CommonUtils {
 
 	private static void createBiz_tk(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Biz.java");
-		writeBufferLine("package com.yule.zu.api." + tableInfo.getTableName() + ";");
+		writeBufferLine("package com.yule.bhms.api." + tableInfo.getTableName() + ";");
 		bw.newLine();
-		writeBufferLine("import com.yule.zu.common.base.BaseBiz;");
+		writeBufferLine("import com.yule.bhms.common.base.BaseBiz;");
 		writeBufferLine("import org.springframework.beans.factory.annotation.Autowired;");
 		writeBufferLine("import org.springframework.stereotype.Service;");
 		writeBufferLine("import org.springframework.transaction.annotation.Transactional;");
@@ -618,30 +625,42 @@ public class CommonUtils {
 
 	private static void createController_tk(TableInfo tableInfo, String outputPath) throws Exception {
 		initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Controller.java");
-		writeBufferLine("package com.yule.zu.api." + tableInfo.getTableName() + ";");
+		writeBufferLine("package com.yule.bhms.api."+underline2Camel(tableInfo.getTableName(), true)+";");
 		bw.newLine();
-		writeBufferLine("import com.yule.zu.common.base.BaseController;");
-		writeBufferLine("import com.yule.zu.common.base.BaseResponse;");
-		writeBufferLine("import io.swagger.annotations.ApiOperation;");
-		writeBufferLine("import io.swagger.annotations.ApiResponse;");
-		writeBufferLine("import io.swagger.annotations.ApiResponses;");
+		writeBufferLine("import com.yule.bhms.common.base.BaseController;");
+		writeBufferLine("import com.yule.bhms.common.base.BaseResponse;");
+		writeBufferLine("import com.yule.bhms.common.base.QueryForm;");
+		writeBufferLine("import io.swagger.annotations.*;");
 		writeBufferLine("import org.springframework.beans.factory.annotation.Autowired;");
-		writeBufferLine("import org.springframework.validation.annotation.Validated;");
 		writeBufferLine("import org.springframework.web.bind.annotation.*;");
 		bw.newLine();
+		writeBufferLine("@Api(value = \""+tableInfo.getRemarks()+"\", description = \""+tableInfo.getRemarks()+"\")");
 		writeBufferLine("@RestController");
 		writeBufferLine("@RequestMapping(\"/" + underline2Camel(tableInfo.getTableName(), true) + "\")");
+		writeBufferLine("@ResponseBody");
 		writeBufferLine("public class " + tableInfo.getEntityName() + "Controller extends BaseController {");
 		bw.newLine();
 		writeBufferLine("   @Autowired");
 		writeBufferLine("   " + tableInfo.getEntityName() + "Biz " + underline2Camel(tableInfo.getTableName(), true) + "Biz;");
 		bw.newLine();
-		writeBufferLine("   @ApiOperation(value = \"demo\", notes = \"demo\")");
+		writeBufferLine("   @ApiOperation(value = \"查询\", notes = \"查询\")");
 		writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
-		writeBufferLine("   @RequestMapping(value = \"/demo\", method = RequestMethod.POST)");
+		writeBufferLine("   @RequestMapping(value = \"/query\", method = RequestMethod.POST)");
 		writeBufferLine("   @ResponseBody");
-		writeBufferLine("   public BaseResponse demo( @RequestBody @Validated  " + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + ")  {");
-		writeBufferLine("       return BaseResponse.success();");
+		writeBufferLine("   public BaseResponse query( @RequestBody QueryForm queryForm )  {");
+		writeBufferLine("        return  "+underline2Camel(tableInfo.getTableName(), true) + "Biz.query(queryForm);");
+		writeBufferLine("   }");
+		writeBufferLine("   @ApiOperation(value = \"保存\", notes = \"保存\")");
+		writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
+		writeBufferLine("   @RequestMapping(value = \"/save\", method = RequestMethod.POST)");
+		writeBufferLine("   @ResponseBody");
+		writeBufferLine("   public BaseResponse save( @RequestBody "+tableInfo.getEntityName()+" "+underline2Camel(tableInfo.getTableName(), true)+" )  {");
+		writeBufferLine("       int count="+underline2Camel(tableInfo.getTableName(), true)+"Biz.save("+underline2Camel(tableInfo.getTableName(), true)+");");
+		writeBufferLine("       if(count>0){");
+		writeBufferLine("          return BaseResponse.success();");
+		writeBufferLine("       }else {");
+		writeBufferLine("          return BaseResponse.fail();");
+		writeBufferLine("       }");
 		writeBufferLine("   }");
 		writeBufferLine("}");
 		bw.flush();

@@ -3,6 +3,7 @@ package personal.mxl;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.util.Enumeration;
@@ -55,32 +57,33 @@ public class MainGui {
         userNameLabel.setBounds(10, 50, 80, 25);
         jPanel.add(userNameLabel);
         final JTextField userNameText = new JTextField(20);
-        userNameText.setBounds(80, 50, 160, 25);
+        userNameText.setBounds(80, 50, 100, 25);
         jPanel.add(userNameText);
         JLabel passwordLabel = new JLabel("密  码:");
-        passwordLabel.setBounds(250, 50, 80, 25);
+        passwordLabel.setBounds(10, 80, 100, 25);//250, 50, 80, 25
         jPanel.add(passwordLabel);
         final JPasswordField passwordText = new JPasswordField(20);
-        passwordText.setBounds(310, 50, 160, 25);
+        passwordText.setBounds(80, 80, 100, 25);//310, 50, 160, 25
         jPanel.add(passwordText);
         JLabel schemaLabel = new JLabel("数据库:");
-        schemaLabel.setBounds(10, 80, 100, 25);
+        schemaLabel.setBounds(200, 50, 80, 25);//10, 80, 100, 25
+        final JLabel schemaText = new JLabel();
+        schemaText.setBounds(270, 50, 80, 25);
+        jPanel.add(schemaText);
         JLabel codeTypeText = new JLabel("选择类型:");
         codeTypeText.setBounds(170, 510, 100, 25);
-        String [] selected ={"大桥","宠宠"};
+        String [] selected ={"健康监测","定期检测"};
         JComboBox codeTypeBox=new JComboBox(selected);
         codeTypeBox.setBounds(250, 510, 100, 25);
         jPanel.add(schemaLabel);
         jPanel.add(codeTypeBox);
         jPanel.add(codeTypeText);
-        final JLabel schemaText = new JLabel();
-        schemaText.setBounds(80, 80, 160, 25);
-        jPanel.add(schemaText);
-        JLabel outputLabel = new JLabel("保  存:");
-        outputLabel.setBounds(250, 80, 100, 25);
+
+        JLabel outputLabel = new JLabel("输  出:");
+        outputLabel.setBounds(200, 80, 120, 25);
         jPanel.add(outputLabel);
         final JTextField outputText = new JTextField();
-        outputText.setBounds(310, 80, 160, 25);
+        outputText.setBounds(270, 80, 210, 25);
         outputText.setText(FileSystemView.getFileSystemView().getHomeDirectory().getAbsoluteFile().getAbsolutePath());
         jPanel.add(outputText);
         final JFileChooser jfc = new JFileChooser();
@@ -167,6 +170,7 @@ public class MainGui {
                     try {
                         codeType=codeTypeBox.getSelectedItem().toString();
                         CommonUtils.createFiles(selectField, selectType, dbmd, outputText.getText(),codeType);
+                        JOptionPane.showMessageDialog(null, "代码已生成到输出目录！");
                     } catch (Exception ex) {
                         CommonUtils.saveErrorLog(outputText.getText(), ex.getMessage());
                         JOptionPane.showMessageDialog(null, "少年，出错了！");
@@ -248,18 +252,18 @@ public class MainGui {
         t4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "这小东西还用写帮助吗？？？ 手动黑人问号？");
+                JOptionPane.showMessageDialog(null, "这小东西还用写帮助吗？？？ ");
             }
         });
-        JMenuItem t5 = new JMenuItem("关于");
-        t5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "欢迎大家来交流！\r\n \r\n 提出宝贵意见！", "关于", JOptionPane.ERROR_MESSAGE, CommonUtils.getIcon());
-            }
-        });
+//        JMenuItem t5 = new JMenuItem("关于");
+//        t5.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                JOptionPane.showMessageDialog(null, "欢迎大家来交流！\r\n \r\n 提出宝贵意见！", "关于", JOptionPane.ERROR_MESSAGE, CommonUtils.getIcon());
+//            }
+//        });
         jm1.add(t4);
-        jm1.add(t5);
+//        jm1.add(t5);
         JMenuBar br = new JMenuBar();
         br.add(jm);
         br.add(jm1);
