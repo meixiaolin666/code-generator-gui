@@ -1,42 +1,26 @@
 package personal.mxl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TableInfo {
     //表名
     private String tableName;
     //实体类名
     private String entityName;
-    //字段
-    private String columnName;
-    //字段类型
-    private String dataTypeName;
-    //字段大小
-    private int columnSize;
-    //字段排序
-    private int ordinalPosition;
-    //备注
-    private String remarks;
+    //表备注
+    private String tableRemarks;
+
+    private List<Column> columnList=new ArrayList<>();
 
     public TableInfo() {
     }
 
-    public TableInfo(String tableName, String entityName, String columnName, String dataTypeName,int columnSize, String remarks, int ordinalPosition) {
+    public TableInfo(String tableName, String entityName,  String tableRemarks) {
         this.tableName = tableName;
         this.entityName = entityName;
-        this.columnName = columnName;
-        this.dataTypeName = dataTypeName;
-        this.columnSize = columnSize;
-        this.remarks = remarks;
-        this.ordinalPosition = ordinalPosition;
+        this.tableRemarks = tableRemarks;
     }
-
-    public int getColumnSize() {
-        return columnSize;
-    }
-
-    public void setColumnSize(int columnSize) {
-        this.columnSize = columnSize;
-    }
-
 
     public String getTableName() {
         return tableName;
@@ -54,35 +38,19 @@ public class TableInfo {
         this.entityName = entityName;
     }
 
-    public String getColumnName() {
-        return columnName;
+    public String getTableRemarks() {
+        return tableRemarks;
     }
 
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setTableRemarks(String tableRemarks) {
+        this.tableRemarks = tableRemarks;
     }
 
-    public String getDataTypeName() {
-        return dataTypeName;
+    public List<Column> getColumnList() {
+        return columnList;
     }
 
-    public void setDataTypeName(String dataTypeName) {
-        this.dataTypeName = dataTypeName;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
-
-    public int getOrdinalPosition() {
-        return ordinalPosition;
-    }
-
-    public void setOrdinalPosition(int ordinalPosition) {
-        this.ordinalPosition = ordinalPosition;
+    public void setColumnList(List<Column> columnList) {
+        this.columnList = columnList;
     }
 }
