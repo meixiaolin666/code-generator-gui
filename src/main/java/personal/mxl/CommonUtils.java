@@ -580,7 +580,7 @@ public class CommonUtils {
         initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + "Mapper.xml");
         writeBufferLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writeBufferLine("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">");
-        writeBufferLine("<mapper namespace=\"" + tableInfo.getEntityName() + "Mapper\">");
+        writeBufferLine("<mapper namespace=\"com.yule.bhms.api." + underline2Camel(tableInfo.getTableName(), true) + "." + tableInfo.getEntityName() + "Mapper\">");
         writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.bhms.api." + underline2Camel(tableInfo.getTableName(), true) + "." + tableInfo.getEntityName() + "\">");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
             if (i == 0) {
