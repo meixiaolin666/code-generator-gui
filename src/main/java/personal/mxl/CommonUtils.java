@@ -534,9 +534,7 @@ public class CommonUtils {
         writeBufferLine("package com.yule.bhms.api." + tableInfo.getTableName() + ";");
         bw.newLine();
         writeBufferLine("import lombok.Data;");
-        writeBufferLine("import javax.persistence.Column;");
-        writeBufferLine("import javax.persistence.Id;");
-        writeBufferLine("import javax.persistence.Table;");
+        writeBufferLine("import javax.persistence.*;");
         writeBufferLine("import javax.validation.constraints.*;");
         writeBufferLine("import java.util.Date;");
         bw.newLine();
@@ -549,6 +547,7 @@ public class CommonUtils {
             writeBufferLine("     */");
             if (i == 0) {
                 writeBufferLine("    @Id");
+                writeBufferLine("    @GeneratedValue(strategy= GenerationType.IDENTITY)");
             }
             writeBufferLine("    @Column(name = \"" + tableInfo.getColumnList().get(i).getColumnName() + "\")");
             writeBufferLine("    private " + changeType(tableInfo.getColumnList().get(i).getDataTypeName(), tableInfo.getColumnList().get(i).getColumnSize()) + " " + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ";");
