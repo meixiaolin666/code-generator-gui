@@ -547,6 +547,7 @@ public class CommonUtils {
             writeBufferLine("     */");
             if (i == 0) {
                 writeBufferLine("    @Id");
+                writeBufferLine("    @NotNull(groups = {UpdateGroup.class} ,message = \"id不能为空\")");
                 writeBufferLine("    @GeneratedValue(strategy= GenerationType.IDENTITY)");
             }
             writeBufferLine("    @Column(name = \"" + tableInfo.getColumnList().get(i).getColumnName() + "\")");
@@ -644,12 +645,24 @@ public class CommonUtils {
         writeBufferLine("   public BaseResponse query( @RequestBody QueryForm queryForm )  {");
         writeBufferLine("        return  " + underline2Camel(tableInfo.getTableName(), true) + "Biz.query(queryForm);");
         writeBufferLine("   }");
-        writeBufferLine("   @ApiOperation(value = \"保存\", notes = \"保存\")");
+        writeBufferLine("   @ApiOperation(value = \"添加\", notes = \"添加\")");
         writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
-        writeBufferLine("   @RequestMapping(value = \"/save\", method = RequestMethod.POST)");
+        writeBufferLine("   @RequestMapping(value = \"/add\", method = RequestMethod.POST)");
         writeBufferLine("   @ResponseBody");
-        writeBufferLine("   public BaseResponse save( @RequestBody " + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + " )  {");
-        writeBufferLine("       int count=" + underline2Camel(tableInfo.getTableName(), true) + "Biz.save(" + underline2Camel(tableInfo.getTableName(), true) + ");");
+        writeBufferLine("   public BaseResponse add( @RequestBody @Validated(InsertGroup.class)" + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + " )  {");
+        writeBufferLine("       int count=" + underline2Camel(tableInfo.getTableName(), true) + "Biz.insertSelective(" + underline2Camel(tableInfo.getTableName(), true) + ");");
+        writeBufferLine("       if(count>0){");
+        writeBufferLine("          return BaseResponse.success();");
+        writeBufferLine("       }else {");
+        writeBufferLine("          return BaseResponse.fail();");
+        writeBufferLine("       }");
+        writeBufferLine("   }");
+        writeBufferLine("   @ApiOperation(value = \"修改\", notes = \"修改\")");
+        writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
+        writeBufferLine("   @RequestMapping(value = \"/update\", method = RequestMethod.POST)");
+        writeBufferLine("   @ResponseBody");
+        writeBufferLine("   public BaseResponse update( @RequestBody @Validated(UpdateGroup.class)" + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + " )  {");
+        writeBufferLine("       int count=" + underline2Camel(tableInfo.getTableName(), true) + "Biz.updateSelectiveByPrimaryKey(" + underline2Camel(tableInfo.getTableName(), true) + ");");
         writeBufferLine("       if(count>0){");
         writeBufferLine("          return BaseResponse.success();");
         writeBufferLine("       }else {");
@@ -714,6 +727,8 @@ private static String getJdbcType(String dataTypeName ){
              jdbcType=dataTypeName.split(" ")[0];
              if("INT".equals(jdbcType)){
                  jdbcType="INTEGER";
+             }else if("DATETIME".equals(jdbcType)){
+                 jdbcType="DATE";
              }
         }catch (Exception e){
             e.printStackTrace();
