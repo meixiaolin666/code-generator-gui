@@ -531,11 +531,13 @@ public class CommonUtils {
     private static void createEntity_tk(TableInfo tableInfo, String outputPath) throws Exception {
 
         initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + ".java");
-        writeBufferLine("package com.yule.bhms.api." + tableInfo.getTableName() + ";");
+        writeBufferLine("package com.yule.bhms.api." + underline2Camel(tableInfo.getTableName(), true)+ ";");
         bw.newLine();
         writeBufferLine("import lombok.Data;");
         writeBufferLine("import javax.persistence.*;");
         writeBufferLine("import javax.validation.constraints.*;");
+        writeBufferLine("import io.swagger.annotations.ApiModelProperty;");
+        writeBufferLine("import com.yule.bhms.common.interfaces.UpdateGroup;");
         writeBufferLine("import java.util.Date;");
         bw.newLine();
         writeBufferLine("@Data");
@@ -550,6 +552,7 @@ public class CommonUtils {
                 writeBufferLine("    @NotNull(groups = {UpdateGroup.class} ,message = \"id不能为空\")");
                 writeBufferLine("    @GeneratedValue(strategy= GenerationType.IDENTITY)");
             }
+            writeBufferLine("    @ApiModelProperty(value = \""+tableInfo.getColumnList().get(i).getColumnRemarks()+"\")");
             writeBufferLine("    @Column(name = \"" + tableInfo.getColumnList().get(i).getColumnName() + "\")");
             writeBufferLine("    private " + changeType(tableInfo.getColumnList().get(i).getDataTypeName(), tableInfo.getColumnList().get(i).getColumnSize()) + " " + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ";");
             bw.newLine();
