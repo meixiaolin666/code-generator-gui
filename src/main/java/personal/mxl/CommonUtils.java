@@ -628,7 +628,10 @@ public class CommonUtils {
         writeBufferLine("import com.yule.bhms.common.base.BaseController;");
         writeBufferLine("import com.yule.bhms.common.base.BaseResponse;");
         writeBufferLine("import com.yule.bhms.common.base.QueryForm;");
+        writeBufferLine("import com.yule.bhms.common.interfaces.InsertGroup;");
+        writeBufferLine("import com.yule.bhms.common.interfaces.UpdateGroup;");
         writeBufferLine("import io.swagger.annotations.*;");
+        writeBufferLine("import org.springframework.validation.annotation.Validated;");
         writeBufferLine("import org.springframework.beans.factory.annotation.Autowired;");
         writeBufferLine("import org.springframework.web.bind.annotation.*;");
         bw.newLine();
