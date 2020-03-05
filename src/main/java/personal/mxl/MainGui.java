@@ -24,6 +24,7 @@ public class MainGui {
     Set<String> selectField = new HashSet<>();
     Set<String> selectType = new HashSet<>();
     String codeType;
+
     public MainGui() {
         JFrame jFrame = new JFrame("代码生成器");
         jFrame.setSize(600, 600);
@@ -72,8 +73,8 @@ public class MainGui {
         jPanel.add(schemaText);
         JLabel codeTypeText = new JLabel("选择类型:");
         codeTypeText.setBounds(170, 510, 100, 25);
-        String [] selected ={"健康监测","定期检测"};
-        JComboBox codeTypeBox=new JComboBox(selected);
+        String[] selected = {"健康监测", "定期检测"};
+        JComboBox codeTypeBox = new JComboBox(selected);
         codeTypeBox.setBounds(250, 510, 100, 25);
         jPanel.add(schemaLabel);
         jPanel.add(codeTypeBox);
@@ -168,8 +169,8 @@ public class MainGui {
                     JOptionPane.showMessageDialog(null, "无可生成文件！");
                 } else {
                     try {
-                        codeType=codeTypeBox.getSelectedItem().toString();
-                        CommonUtils.createFiles(selectField, selectType, dbmd, outputText.getText(),codeType);
+                        codeType = codeTypeBox.getSelectedItem().toString();
+                        CommonUtils.createFiles(selectField, selectType, dbmd, outputText.getText(), codeType);
                         JOptionPane.showMessageDialog(null, "代码已生成到输出目录！");
                     } catch (Exception ex) {
                         CommonUtils.saveErrorLog(outputText.getText(), ex.getMessage());

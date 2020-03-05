@@ -135,7 +135,7 @@ public class CommonUtils {
             ResultSet tablesRs = dbmd.getTables(null, null, table, new String[]{"TABLE", "VIEW"});
             while (tablesRs.next()) {
                 String tableName = tablesRs.getString("TABLE_NAME");
-                String tableRemarks = tablesRs.getString("REMARKS").replace("\\r","").replace("\\n","");
+                String tableRemarks = tablesRs.getString("REMARKS").replace("\\r", "").replace("\\n", "");
                 TableInfo tableInfo = new TableInfo(tableName, underline2Camel(tableName, false), tableRemarks);
                 List<Column> columnList = new ArrayList<>();
                 ResultSet columnRs = dbmd.getColumns(null, null, table, null);
@@ -144,7 +144,7 @@ public class CommonUtils {
                     String dataTypeName = columnRs.getString("TYPE_NAME");
                     int ordinalPosition = columnRs.getInt("ORDINAL_POSITION");
                     int columnSize = columnRs.getInt("COLUMN_SIZE");
-                    String columnRemarks = columnRs.getString("REMARKS").replace("\\r","").replace("\\n","");
+                    String columnRemarks = columnRs.getString("REMARKS").replace("\\r", "").replace("\\n", "");
                     columnList.add(new Column(columnName, dataTypeName, columnSize, ordinalPosition, columnRemarks));
                 }
                 tableInfo.setColumnList(columnList);
@@ -193,7 +193,7 @@ public class CommonUtils {
         writeBufferLine("import javax.annotation.Resource;");
 
         bw.newLine();
-        writeBufferLine("@Api(value = \""+tableInfo.getTableRemarks()+"\", description = \""+tableInfo.getTableRemarks()+"\")");
+        writeBufferLine("@Api(value = \"" + tableInfo.getTableRemarks() + "\", description = \"" + tableInfo.getTableRemarks() + "\")");
         writeBufferLine("@RestController");
         writeBufferLine("@RequestMapping(\"/" + underline2Camel(tableInfo.getTableName(), true) + "\")");
         writeBufferLine("public class " + tableInfo.getEntityName() + "Controller extends BaseController {");
@@ -433,9 +433,9 @@ public class CommonUtils {
         writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"domain." + tableInfo.getEntityName() + "\">");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
             if (i == 0) {
-                writeBufferLine("       <id column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" +getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
+                writeBufferLine("       <id column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
             } else {
-                writeBufferLine("       <result column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" +getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
+                writeBufferLine("       <result column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
             }
         }
         writeBufferLine("   </resultMap>");
@@ -449,7 +449,7 @@ public class CommonUtils {
         writeBufferLine("       select");
         writeBufferLine("       <include refid=\"Base_Column_List\" />");
         writeBufferLine("       from " + tableInfo.getTableName());
-        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
+        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
         writeBufferLine("   </select>");
         writeBufferLine("   <select id=\"selectByTaskIdAndBridgeId\" resultType=\"domain." + tableInfo.getEntityName() + "\">");
         writeBufferLine("       select");
@@ -461,7 +461,7 @@ public class CommonUtils {
         writeBufferLine("   </select>");
         writeBufferLine("   <delete id=\"deleteByPrimaryKey\" parameterType=\"java.lang." + changeType(tableInfo.getColumnList().get(0).getColumnName(), tableInfo.getColumnList().get(0).getColumnSize()) + "\">");
         writeBufferLine("       delete from " + tableInfo.getTableName());
-        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
+        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
         writeBufferLine("   </delete>");
         writeBufferLine("   <insert id=\"insert\" parameterType=\"domain." + tableInfo.getEntityName() + "\" useGeneratedKeys=\"true\"\n" +
                 "            keyProperty=\"id\">");
@@ -470,7 +470,7 @@ public class CommonUtils {
         writeBufferLine("       )");
         writeBufferLine("       values (");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
-            bw.write("          #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "}");
+            bw.write("          #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "}");
             if (i != tableInfo.getColumnList().size() - 1) {
                 bw.write(", ");
             }
@@ -491,7 +491,7 @@ public class CommonUtils {
         writeBufferLine("       <trim prefix=\"values(\" suffix=\")\" suffixOverrides=\",\">");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
             writeBufferLine("           <if test=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "!= null\">");
-            writeBufferLine("               #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "},");
+            writeBufferLine("               #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "},");
             writeBufferLine("           </if>");
         }
         writeBufferLine("       </trim>");
@@ -500,14 +500,14 @@ public class CommonUtils {
         writeBufferLine("       update " + tableInfo.getTableName() + " set");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
             if (i != 0) {
-                bw.write("              " + tableInfo.getColumnList().get(i).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "}");
+                bw.write("              " + tableInfo.getColumnList().get(i).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "}");
                 if (i != tableInfo.getColumnList().size() - 1) {
                     bw.write(", ");
                 }
                 bw.newLine();
             }
         }
-        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
+        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + " = #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
         writeBufferLine("   </update>");
         writeBufferLine("   <update id=\"updateByPrimaryKeySelective\" parameterType=\"domain." + tableInfo.getEntityName() + "\">");
         writeBufferLine("       update " + tableInfo.getTableName());
@@ -515,12 +515,12 @@ public class CommonUtils {
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
             if (i != 0) {
                 writeBufferLine("           <if test=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "!= null\">");
-                writeBufferLine("           " + tableInfo.getColumnList().get(i).getColumnName() + "= #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType = " + getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "},");
+                writeBufferLine("           " + tableInfo.getColumnList().get(i).getColumnName() + "= #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType = " + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "},");
                 writeBufferLine("           </if>");
             }
         }
         writeBufferLine("       </set>");
-        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + "= #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType( tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
+        writeBufferLine("       where " + tableInfo.getColumnList().get(0).getColumnName() + "= #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(0).getDataTypeName()) + "}");
         writeBufferLine("   </update>");
         writeBufferLine("</mapper>");
         bw.flush();
@@ -531,7 +531,7 @@ public class CommonUtils {
     private static void createEntity_tk(TableInfo tableInfo, String outputPath) throws Exception {
 
         initBufferedWriter(outputPath + "/" + underline2Camel(tableInfo.getTableName(), true) + "/" + tableInfo.getEntityName() + ".java");
-        writeBufferLine("package com.yule.bhms.api." + underline2Camel(tableInfo.getTableName(), true)+ ";");
+        writeBufferLine("package com.yule.bhms.api." + underline2Camel(tableInfo.getTableName(), true) + ";");
         bw.newLine();
         writeBufferLine("import lombok.Data;");
         writeBufferLine("import javax.persistence.*;");
@@ -552,7 +552,7 @@ public class CommonUtils {
                 writeBufferLine("    @NotNull(groups = {UpdateGroup.class} ,message = \"id不能为空\")");
                 writeBufferLine("    @GeneratedValue(strategy= GenerationType.IDENTITY)");
             }
-            writeBufferLine("    @ApiModelProperty(value = \""+tableInfo.getColumnList().get(i).getColumnRemarks()+"\")");
+            writeBufferLine("    @ApiModelProperty(value = \"" + tableInfo.getColumnList().get(i).getColumnRemarks() + "\")");
             writeBufferLine("    @Column(name = \"" + tableInfo.getColumnList().get(i).getColumnName() + "\")");
             writeBufferLine("    private " + changeType(tableInfo.getColumnList().get(i).getDataTypeName(), tableInfo.getColumnList().get(i).getColumnSize()) + " " + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ";");
             bw.newLine();
@@ -587,9 +587,9 @@ public class CommonUtils {
         writeBufferLine("   <resultMap id=\"BaseResultMap\" type=\"com.yule.bhms.api." + underline2Camel(tableInfo.getTableName(), true) + "." + tableInfo.getEntityName() + "\">");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
             if (i == 0) {
-                writeBufferLine("       <id column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" + getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
+                writeBufferLine("       <id column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
             } else {
-                writeBufferLine("       <result column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" + getJdbcType( tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
+                writeBufferLine("       <result column=\"" + tableInfo.getColumnList().get(i).getColumnName() + "\" jdbcType=\"" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "\" property=\"" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + "\" />");
             }
         }
         writeBufferLine("   </resultMap>");
@@ -637,7 +637,7 @@ public class CommonUtils {
         bw.newLine();
         writeBufferLine("@Api(value = \"" + tableInfo.getTableRemarks() + "\", description = \"" + tableInfo.getTableRemarks() + "\")");
         writeBufferLine("@RestController");
-        writeBufferLine("@RequestMapping(\"/" + underline2Camel(tableInfo.getTableName(), true) + "\")");
+        writeBufferLine("@RequestMapping(\"/api/" + underline2Camel(tableInfo.getTableName(), true) + "\")");
         writeBufferLine("@ResponseBody");
         writeBufferLine("public class " + tableInfo.getEntityName() + "Controller extends BaseController {");
         bw.newLine();
@@ -727,23 +727,22 @@ public class CommonUtils {
 
     }
 
-private static String getJdbcType(String dataTypeName ){
-        String jdbcType="";
+    private static String getJdbcType(String dataTypeName) {
+        String jdbcType = "";
         try {
-             jdbcType=dataTypeName.split(" ")[0];
-             if("INT".equals(jdbcType)){
-                 jdbcType="INTEGER";
-             }else if("DATETIME".equals(jdbcType)){
-                 jdbcType="DATE";
-             }
-        }catch (Exception e){
+            jdbcType = dataTypeName.split(" ")[0];
+            if ("INT".equals(jdbcType)) {
+                jdbcType = "INTEGER";
+            } else if ("DATETIME".equals(jdbcType)) {
+                jdbcType = "DATE";
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return jdbcType;
         }
 
 
-
-}
+    }
 
 }

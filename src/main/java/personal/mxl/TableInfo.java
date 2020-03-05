@@ -11,12 +11,12 @@ public class TableInfo {
     //表备注
     private String tableRemarks;
 
-    private List<Column> columnList=new ArrayList<>();
+    private List<Column> columnList = new ArrayList<>();
 
     public TableInfo() {
     }
 
-    public TableInfo(String tableName, String entityName,  String tableRemarks) {
+    public TableInfo(String tableName, String entityName, String tableRemarks) {
         this.tableName = tableName;
         this.entityName = entityName;
         this.tableRemarks = tableRemarks;

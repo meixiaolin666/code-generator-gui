@@ -14,6 +14,7 @@ public class Column {
 
     public Column() {
     }
+
     public Column(String columnName, String dataTypeName, int columnSize, int ordinalPosition, String columnRemarks) {
         this.columnName = columnName;
         this.dataTypeName = dataTypeName;

@@ -3,12 +3,13 @@ package personal.mxl;
 import java.sql.*;
 import java.util.Properties;
 
-public  class JdbcUtils {
+public class JdbcUtils {
     private static String DRIVER = "com.mysql.jdbc.Driver";
     private static String URL = "";
     private static String USER = "";
     private static String PASS = "";
     private static Connection conn;
+
     public static String getURL() {
         return URL;
     }
@@ -60,19 +61,20 @@ public  class JdbcUtils {
             }
         }
     }
+
     public static void close() {
         close(conn);
     }
 
     public static DatabaseMetaData getDataBaseInfo() throws Exception {
         Class.forName("com.mysql.jdbc.Driver");
-        Properties props =new Properties();
-        props.put("remarksReporting","true");
-        props.put("useInformationSchema","true");
+        Properties props = new Properties();
+        props.put("remarksReporting", "true");
+        props.put("useInformationSchema", "true");
         props.put("user", USER);
         props.put("password", PASS);
-        props.put("characterEncoding","utf8");
-    conn =DriverManager.getConnection(URL,props);
+        props.put("characterEncoding", "utf8");
+        conn = DriverManager.getConnection(URL, props);
         return conn.getMetaData();
     }
 
