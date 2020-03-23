@@ -208,7 +208,6 @@ public class CommonUtils {
         writeBufferLine("           @ApiImplicitParam(name = \"bridgeId\", value = \"桥梁id\", dataType = \"Long\", paramType = \"query\", example = \"1\", required = true)");
         writeBufferLine("   })");
         writeBufferLine("   @RequestMapping(value = \"/select" + tableInfo.getEntityName() + "\", method = RequestMethod.GET)");
-        writeBufferLine("   @ResponseBody");
         writeBufferLine("   public ResponseBodyDto select" + tableInfo.getEntityName() + "( Long taskId, Long bridgeId )  {");
         writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.select" + tableInfo.getEntityName() + "(taskId,bridgeId));");
         writeBufferLine("   }");
@@ -222,7 +221,6 @@ public class CommonUtils {
         writeBufferLine("            @ApiImplicitParam(name = \"pageSize\", value = \"每页条数\", dataType = \"Integer\", paramType = \"query\", example = \"10\", required = true)");
         writeBufferLine("   })");
         writeBufferLine("   @RequestMapping(value = \"/select" + tableInfo.getEntityName() + "Paging\", method = RequestMethod.GET)");
-        writeBufferLine("   @ResponseBody");
         writeBufferLine("   public ResponseBodyDto select" + tableInfo.getEntityName() + "Paging(Integer currentPage, Integer pageSize, Long taskId, Long bridgeId )  {");
         writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.select" + tableInfo.getEntityName() + "Paging(currentPage,pageSize,taskId,bridgeId));");
         writeBufferLine("   }");
@@ -230,14 +228,12 @@ public class CommonUtils {
         writeBufferLine("   @ApiOperation(value = \"批量保存\", notes = \"批量保存\")");
         writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = ResponseBodyDto.class)})");
         writeBufferLine("   @RequestMapping(value = \"/save" + tableInfo.getEntityName() + "List\", method = RequestMethod.POST)");
-        writeBufferLine("   @ResponseBody");
         writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "List( @RequestBody " + tableInfo.getEntityName() + "Dto " + underline2Camel(tableInfo.getTableName(), true) + "Dto )  {");
         writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.save" + tableInfo.getEntityName() + "List(" + underline2Camel(tableInfo.getTableName(), true) + "Dto.get" + tableInfo.getEntityName() + "List()));");
         writeBufferLine("   }");
         writeBufferLine("   @ApiOperation(value = \"保存\", notes = \"保存\")");
         writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = ResponseBodyDto.class)})");
         writeBufferLine("   @RequestMapping(value = \"/save" + tableInfo.getEntityName() + "\", method = RequestMethod.POST)");
-        writeBufferLine("   @ResponseBody");
         writeBufferLine("   public ResponseBodyDto save" + tableInfo.getEntityName() + "( @RequestBody " + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + " )  {");
         writeBufferLine("        return new ResponseBodyDto<>( " + underline2Camel(tableInfo.getTableName(), true) + "Service.save" + tableInfo.getEntityName() + "(" + underline2Camel(tableInfo.getTableName(), true) + "));");
         writeBufferLine("   }");
@@ -638,7 +634,6 @@ public class CommonUtils {
         writeBufferLine("@Api(value = \"" + tableInfo.getTableRemarks() + "\", description = \"" + tableInfo.getTableRemarks() + "\")");
         writeBufferLine("@RestController");
         writeBufferLine("@RequestMapping(\"/api/" + underline2Camel(tableInfo.getTableName(), true) + "\")");
-        writeBufferLine("@ResponseBody");
         writeBufferLine("public class " + tableInfo.getEntityName() + "Controller extends BaseController {");
         bw.newLine();
         writeBufferLine("   @Autowired");
@@ -647,7 +642,6 @@ public class CommonUtils {
         writeBufferLine("   @ApiOperation(value = \"查询\", notes = \"查询\")");
         writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
         writeBufferLine("   @RequestMapping(value = \"/query\", method = RequestMethod.POST)");
-        writeBufferLine("   @ResponseBody");
         writeBufferLine("   public BaseResponse query( @RequestBody QueryForm queryForm )  {");
         writeBufferLine("        return  " + underline2Camel(tableInfo.getTableName(), true) + "Biz.query(queryForm);");
         writeBufferLine("   }");
@@ -666,7 +660,6 @@ public class CommonUtils {
         writeBufferLine("   @ApiOperation(value = \"修改\", notes = \"修改\")");
         writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
         writeBufferLine("   @RequestMapping(value = \"/update\", method = RequestMethod.POST)");
-        writeBufferLine("   @ResponseBody");
         writeBufferLine("   public BaseResponse update( @RequestBody @Validated(UpdateGroup.class)" + tableInfo.getEntityName() + " " + underline2Camel(tableInfo.getTableName(), true) + " )  {");
         writeBufferLine("       int count=" + underline2Camel(tableInfo.getTableName(), true) + "Biz.updateSelectiveByPrimaryKey(" + underline2Camel(tableInfo.getTableName(), true) + ");");
         writeBufferLine("       if(count>0){");
