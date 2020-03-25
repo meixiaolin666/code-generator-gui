@@ -466,7 +466,7 @@ public class CommonUtils {
         writeBufferLine("       )");
         writeBufferLine("       values (");
         for (int i = 0; i < tableInfo.getColumnList().size(); i++) {
-            bw.write("          #{" + underline2Camel(tableInfo.getColumnList().get(0).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "}");
+            bw.write("          #{" + underline2Camel(tableInfo.getColumnList().get(i).getColumnName(), true) + ",jdbcType=" + getJdbcType(tableInfo.getColumnList().get(i).getDataTypeName()) + "}");
             if (i != tableInfo.getColumnList().size() - 1) {
                 bw.write(", ");
             }
