@@ -642,7 +642,7 @@ public class CommonUtils {
         writeBufferLine("   @ApiOperation(value = \"查询\", notes = \"查询\")");
         writeBufferLine("   @ApiResponses({@ApiResponse(code = 200, message = \"success\", response = BaseResponse.class)})\n");
         writeBufferLine("   @RequestMapping(value = \"/query\", method = RequestMethod.POST)");
-        writeBufferLine("   public BaseResponse query( @RequestBody QueryForm queryForm )  {");
+        writeBufferLine("   public BaseResponse query( @RequestBody QueryForm<"+tableInfo.getEntityName()+"> queryForm )  {");
         writeBufferLine("        return  " + underline2Camel(tableInfo.getTableName(), true) + "Biz.query(queryForm);");
         writeBufferLine("   }");
         writeBufferLine("   @ApiOperation(value = \"添加\", notes = \"添加\")");
